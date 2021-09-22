@@ -5,22 +5,8 @@ public class ColorSort {
    enum Color {red, green, blue}
 
    public static void main (String[] param) {
-      Color[] balling = {Color.blue,Color.green, Color.red, Color.red, Color.blue, Color.red,
-              Color.blue,Color.green, Color.red, Color.red, Color.blue, Color.red,
-              Color.blue,Color.green, Color.red, Color.red, Color.blue, Color.red,
-              Color.blue,Color.green, Color.red, Color.red, Color.blue, Color.red,
-              Color.blue,Color.green, Color.red, Color.red, Color.blue, Color.red,
-              Color.blue,Color.green, Color.red, Color.red, Color.blue, Color.red,
-              Color.blue,Color.green, Color.red, Color.red, Color.blue, Color.red,
-              Color.blue,Color.green, Color.red, Color.red, Color.blue, Color.red,
-              Color.blue,Color.green, Color.red, Color.red, Color.blue, Color.red,
-              Color.blue,Color.green, Color.red, Color.red, Color.blue, Color.red,
-              Color.blue,Color.green, Color.red, Color.red, Color.blue, Color.red,
-              Color.blue,Color.green, Color.red, Color.red, Color.blue, Color.red,
-              Color.blue,Color.green, Color.red, Color.red, Color.blue, Color.red,
-              Color.blue,Color.green, Color.red, Color.red, Color.blue, Color.red,
-              Color.blue,Color.green, Color.red, Color.red, Color.blue, Color.red,
-              Color.blue,Color.green, Color.red, Color.red, Color.blue, Color.red};
+      Color[] balling = {Color.blue, Color.blue, Color.red,
+              Color.red, Color.green, Color.green};
       System.out.println("Before: " + Arrays.toString(balling));
       long startTime = System.nanoTime();
       reorder(balling);
@@ -31,36 +17,42 @@ public class ColorSort {
    }
 
    public static void reorder (Color[] balls) {
-      // Bubble sort
-      // boolean needToSwap;
-      for (int i = 0; i < balls.length - 1; i++) {
-         // needToSwap = false;
-         for (int j = 0; j < balls.length - i - 1; j++) {
-            // comparing strings
-            if (balls[j].compareTo(balls[j + 1]) > 0) {
-               Color temp = balls[j];
-               balls[j] = balls[j + 1];
-               balls[j + 1] = temp;
-               // needToSwap = true;
+      // * - lo/hi/mid; ** - lo+mid
+      // **?** ? ? ? ? ? ? ? *?*
+      // after some iterations
+      // red red *green* green *?* ? *?* blue blue
+      int lo = 0;
+      int hi = balls.length - 1;
+      int mid = 0;
+      Color temp;
+      while (mid <= hi) {
+         switch (balls[mid]) {
+            case red: {
+               // swap elem to the left side
+               // and increase the lo and the mid border
+               temp = balls[lo];
+               balls[lo] = balls[mid];
+               balls[mid] = temp;
+               lo++;
+               mid++;
+               break;
+            }
+            case green:
+               // leave elem at same place(in the middle)
+               // and increase the mid border
+               mid++;
+               break;
+            case blue: {
+               // swap elem to the right side
+               // and decrease the hi border
+               temp = balls[mid];
+               balls[mid] = balls[hi];
+               balls[hi] = temp;
+               hi--;
+               break;
             }
          }
-         // if (!needToSwap) {
-         //    break;
-         // }
       }
    }
-   //After: [red, red, green, blue, blue, red]
-   //        for (i = 0; i < balls.length - 1; i++) {
-   //            swapped = false;
-   //            for (j = 0; j < balls.length - i - 1; j++) {
-   //                if (arr[j] > arr[j + 1]) {
-   //                    temp = arr[j];
-   //                    arr[j] = arr[j + 1];
-   //                    arr[j + 1] = temp;
-   //                    swapped = true;
-   //                }
-   //            }
-   //            if (swapped == false)
-   //                break;
-   //        }
 }
+
